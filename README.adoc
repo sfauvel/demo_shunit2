@@ -1,0 +1,27 @@
+= Bash examples
+
+Make some test on shell scripts is possible. 
+You will find some examples in this project.
+
+
+== Quick start
+
+First, get shunit2 cloning repository: 
+`git clone https://github.com/kward/shunit2` 
+
+`shunit2` should be at the root of this project (like `examples` folder).
+
+Go to `examples/bash` folder and run one scripts, for examples: `./sed_test.sh`
+
+== Explanation
+
+Test script should start with shebang corresponding to the shell to test.
+
+If you want to test `bash`, uses:
+----
+#! /bin/bash
+----
+
+== Resources
+
+link:https://github.com/kward/shunit2[]
