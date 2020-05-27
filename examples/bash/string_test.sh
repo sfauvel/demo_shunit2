@@ -3,10 +3,6 @@
 # Test sed.
 # http://tldp.org/LDP/abs/html/string-manipulation.html
 
-test_found_text_in_file() {
-  assertContains "$(cat $TEXT_IN_FILE)" "some lines" 
-}
-
 test_found_text_in_string() {
   assertContains "$TEXT_IN_VARIABLE" "some lines" 
 }
@@ -22,20 +18,17 @@ test_find_a_string_in_a_multilines_text() {
   assertContains "${TEXT_IN_VARIABLE//$'\n'/' '}" "file with" 
 }
 
-setUp() {
-  testDir="${SHUNIT_TMPDIR}/sed"
-  mkdir "${testDir}"
+test_append_to_string() {
+  local TMP=toto
+  assertEquals "toto" "${TMP}" 
+  TMP="$TMP;titi"
+  assertEquals "toto;titi" "${TMP}" 
+}
 
+setUp() {
   TEXT_IN_VARIABLE=$(echo "Test file
 with some lines
 used to test sed command")
-
-  TEXT_IN_FILE=${testDir}/file.txt
-  echo $TEXT_IN_VARIABLE > ${TEXT_IN_FILE}
-}
-
-tearDown() {
-  rm -fr "${testDir}"
 }
 
 # Load and run shUnit2.
