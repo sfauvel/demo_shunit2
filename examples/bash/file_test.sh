@@ -48,6 +48,28 @@ test_loop_over_files_with_space_in_name() {
 
 }
 
+test_rename_to_uppercase() {
+
+  pushd ${testDir}
+  touch "abc.txt"
+  touch "xyz.txt"
+  rename 's/^([a-z]+)/\U$1/' *.txt
+  popd
+
+  assertEquals "ABC.txt;XYZ.txt;" "$(files_list ${testDir})"
+
+}
+
+# Display files in folder
+files_list() {
+  local FILES=""
+  for file in $1/*
+  do
+    FILES="$FILES${file##*/};"
+  done
+  echo $FILES
+}
+
 test_chmod_with_space() {
   FILE="${testDir}/a a a.txt"
   touch "${FILE}"
