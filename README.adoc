@@ -1,3 +1,5 @@
+:description: Test shell scripts using shunit2.
+
 = Bash examples
 
 Make some test on shell scripts is possible. 
