@@ -12,6 +12,11 @@ test_filename_without_extension() {
   assertEquals "file" "${FILENAME%%.*}" 
 }
 
+test_filename_without_extension_when_spaces() {
+  FILENAME="file to find.txt"
+  assertEquals "file to find" "${FILENAME%%.*}" 
+}
+
 test_extension_file() {
   FILENAME="file.txt"
   assertEquals "txt" "${FILENAME##*.}" 
@@ -44,6 +49,23 @@ test_loop_over_files_with_space_in_name() {
   do
     FILES="$FILES${file##*/};"
   done
+  assertEquals "a a a.txt;b b b.txt;" "${FILES}"
+
+}
+
+# https://unix.stackexchange.com/questions/9496/looping-through-files-with-spaces-in-the-names
+test_loop_over_files_using_for_with_space_in_name() {
+  touch "${testDir}/a a a.txt"
+  touch "${testDir}/b b b.txt"
+
+  OLD_IFS="$IFS"
+  IFS=$'\n'
+  for file in $(find ${testDir} -name *.txt | sort)
+  do
+    FILES="$FILES${file##*/};"
+  done
+  IFS=$OLD_IFS
+
   assertEquals "a a a.txt;b b b.txt;" "${FILES}"
 
 }
