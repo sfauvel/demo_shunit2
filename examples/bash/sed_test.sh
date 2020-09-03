@@ -17,6 +17,21 @@ test_replace_text_in_file_ignoring_case() {
   assertContains "$(cat $TEXT_IN_FILE)" "one line" 
 }
 
+test_replace_text_with_group() { 
+  sed -i 's/some \(.*\) used/some x\1x used/' ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "some xlinesx used" 
+}
+
+test_replace_text_with_group_a_z() {
+  sed -i 's/test sed \([a-z]*\)/test sed x\1x/' ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "test sed xcommandx" 
+}
+
+test_replace_text_with_group_word() {
+  sed -i 's/test sed \(\w*\)/test sed x\1x/' ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "test sed xcommandx" 
+}
+
 test_replace_all_in_file() {
 
   # Add option `g` to replace all occurences

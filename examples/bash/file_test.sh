@@ -27,6 +27,19 @@ test_remove_folder_from_file_path() {
   assertEquals "file.txt" "${FILEPATH##*/}" 
 }
 
+test_file_folder() {
+  FILEPATH="${testDir}/file.txt"
+  assertEquals "${testDir}" "$(dirname ${FILEPATH})" 
+}
+
+test_realpath() {
+  mkdir "${testDir}/a"
+  mkdir "${testDir}/a/b"
+  touch "${testDir}/file.txt"
+  FILEPATH="${testDir}/a/b/../../file.txt"
+  assertEquals "${testDir}/file.txt" "$(realpath ${FILEPATH})" 
+}
+
 test_loop_over_files() {
   touch "${testDir}/aaa.txt"
   touch "${testDir}/bbb.txt"
