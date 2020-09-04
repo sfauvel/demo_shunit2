@@ -13,9 +13,13 @@ test_replace_text_in_string() {
 }
 
 test_find_a_string_in_a_multilines_text() {
-  TMP=${TEXT_IN_VARIABLE//$'\n'/' '}
+  TMP=${TEXT_IN_VARIABLE//$'\n'/' '} # replace line break by space to have all text in one line.
   assertContains "${TMP}" "file with" 
   assertContains "${TEXT_IN_VARIABLE//$'\n'/' '}" "file with" 
+}
+
+test_find_last_line_in_multilines_text() {
+  assertEquals "${TEXT_IN_VARIABLE##*$'\n'}" "used to test string commands" 
 }
 
 test_append_to_string() {
@@ -28,7 +32,7 @@ test_append_to_string() {
 setUp() {
   TEXT_IN_VARIABLE=$(echo "Test file
 with some lines
-used to test sed command")
+used to test string commands")
 }
 
 # Load and run shUnit2.
