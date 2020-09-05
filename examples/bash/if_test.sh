@@ -4,6 +4,7 @@ test_if_variable_not_exist() {
   unset TOTO
   if [[ -z $TOTO ]]
   then
+    echo "OK"
     # Variable not exist, it's ok
   else
     fail "Should not exist"   
