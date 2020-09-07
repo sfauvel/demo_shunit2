@@ -17,8 +17,16 @@ test_compare_numeric_variable() {
 
 test_increment() {
   FIVE=5
-  SIX=$FIVE+3
-  assertTrue "[[ $SIX -eq 8 ]]"
+
+  EIGHT=$FIVE+3
+  # With eq, variable is evaluated as numeric
+  assertTrue "[[ $EIGHT -eq 8 ]]"
+  assertTrue "[[ $EIGHT -eq "5+3" ]]"
+  # With =, variable is compared as string
+  assertTrue "[[ $EIGHT = "5+3" ]]"
+
+  EIGHT_NUM=$(($FIVE+3))
+  assertTrue "[[ $EIGHT_NUM = "8" ]]"
 }
 
 # Load and run shUnit2.
