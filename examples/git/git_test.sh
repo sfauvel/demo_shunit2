@@ -47,6 +47,24 @@ test_file_status_after_modified_and_add() {
   assertEquals "M  file.txt" "$(git status -s --no-renames)" 
 }
 
+test_file_status_after_removed_from_disk() {
+  init_and_add_file  
+  GIT commit -m "First commit" 
+  rm file.txt 
+
+  assertEquals " D file.txt" "$(git status -s --no-renames)" 
+}
+
+
+test_file_status_removed_from_git_index() {
+  init_and_add_file
+  GIT commit -m "First commit"
+  GIT rm file.txt 
+
+  assertEquals "D  file.txt" "$(git status -s --no-renames)" 
+}
+
+
 test_file_diff_after_modified() {
   init_and_add_file
   GIT commit -m "First commit"
@@ -88,6 +106,55 @@ test_file_diff_remove_file_from_git_index() {
   assertContains "$(echo $(git diff --staged))" "--- a/file.txt +++ /dev/null"
   assertContains "$(echo $(git diff --staged))" "deleted file"
 }
+
+test_keep_only_not_staged_diff() {
+  GIT init 
+  echo "Hello" > file_A.txt  
+  echo "Hello" > file_B.txt  
+  echo "Hello" > file_C.txt  
+  echo "Hello" > file_E.txt  
+  echo "Hello" > file_F.txt  
+  echo "Hello" > file_G.txt
+
+  GIT add file_A.txt
+  GIT add file_B.txt
+  GIT add file_C.txt 
+  GIT add file_E.txt  
+  GIT add file_F.txt 
+  GIT add file_G.txt 
+
+  GIT commit -m "First commit" 
+ 
+  echo "Hello" > file_D.txt  
+  rm file_B.txt
+  GIT rm file_C.txt
+  echo " world!" >> file_E.txt
+  echo " world!" >> file_F.txt
+  GIT add file_F.txt
+  echo " world!" >> file_G.txt
+  GIT add file_G.txt
+  echo "!!" >> file_G.txt
+  
+  STATUS=$(git status -s --no-renames)
+
+  assertNotContains "$STATUS" "file_A.txt" 
+  assertContains    "$STATUS" " D file_B.txt" 
+  assertContains    "$STATUS" "D  file_C.txt" 
+  assertContains    "$STATUS" "?? file_D.txt" 
+  assertContains    "$STATUS" " M file_E.txt" 
+  assertContains    "$STATUS" "M  file_F.txt" 
+  
+  NOT_STAGED_STATUS=$(echo "$STATUS" | grep "^.[^ ].*$")
+  
+  assertNotContains "$NOT_STAGED_STATUS" "file_A.txt"
+  assertContains    "$NOT_STAGED_STATUS" " D file_B.txt"  
+  assertNotContains "$NOT_STAGED_STATUS" "file_C.txt" 
+  assertContains    "$NOT_STAGED_STATUS" "?? file_D.txt"
+  assertContains    "$NOT_STAGED_STATUS" " M file_E.txt"
+  assertNotContains "$NOT_STAGED_STATUS" "file_F.txt"
+  assertContains    "$NOT_STAGED_STATUS" "MM file_G.txt"
+}
+
 
 init_and_add_file() {
   GIT init  
