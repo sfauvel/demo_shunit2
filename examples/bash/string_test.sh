@@ -3,8 +3,22 @@
 # Test sed.
 # http://tldp.org/LDP/abs/html/string-manipulation.html
 
-test_found_text_in_string() {
+test_assert_contains_found_text_in_string() {
   assertContains "$TEXT_IN_VARIABLE" "some lines" 
+}
+
+test_search_text_present_in_string() {
+  if [[ ! "my text with some words" =~ "with some" ]]
+  then
+    fail "Substring should be found in string"
+  fi
+}
+
+test_search_text_not_present_in_string() {
+  if [[ "my text with some words" =~ "text not in string" ]]
+  then
+    fail "Substring should not be found in string"
+  fi
 }
 
 test_replace_text_in_string() {
