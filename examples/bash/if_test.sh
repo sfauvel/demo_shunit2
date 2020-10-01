@@ -2,13 +2,20 @@
 
 test_if_variable_not_exist() {
   unset TOTO
-  if [[ -z $TOTO ]]; then pass else fail "Should not exist"; fi
+  if [[ ! -z $TOTO ]]; then fail "Should not exist"; fi
+  if [[ -n $TOTO ]]; then fail "Should not exist"; fi
 }
 
+test_if_variable_is_empty() {
+  TOTO=""
+  if [[ ! -z $TOTO ]]; then fail "Should not exist"; fi
+  if [[ -n $TOTO ]]; then fail "Should not exist"; fi
+}
 
 test_if_variable_exist() {
   TOTO="toto"
   if [[ -z $TOTO ]]; then fail "Variable should exist"; fi
+  if [[ ! -n $TOTO ]]; then fail "Should not exist"; fi
 }
 
 test_if_with_or() {
