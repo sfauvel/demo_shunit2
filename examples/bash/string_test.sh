@@ -32,8 +32,18 @@ test_find_a_string_in_a_multilines_text() {
   assertContains "${TEXT_IN_VARIABLE//$'\n'/' '}" "file with" 
 }
 
+test_find_lines_containing_a_text() {
+  LINE=$(grep "some" <<< "${TEXT_IN_VARIABLE}")
+  assertEquals "with some lines" "$LINE" 
+}
+
 test_find_last_line_in_multilines_text() {
   assertEquals "${TEXT_IN_VARIABLE##*$'\n'}" "used to test string commands" 
+}
+
+test_select_substring() {
+  TEXT="0123456789"
+  assertEquals "56" "${TEXT:5:2}" 
 }
 
 test_append_to_string() {
@@ -41,6 +51,34 @@ test_append_to_string() {
   assertEquals "toto" "${TMP}" 
   TMP="$TMP;titi"
   assertEquals "toto;titi" "${TMP}" 
+}
+
+
+test_split_by_line() {
+  TEXT_IN_VARIABLE=$(echo "Test file
+with some lines
+used to test")
+  
+ local index=0; while read -r line; do lines[$index]="$line";index=$(($index+1)); done <<< "$TEXT_IN_VARIABLE"
+
+  assertEquals 3 $index
+  assertEquals 3 ${#lines[*]}
+
+  assertEquals "Test file" "${lines[0]}"
+  assertEquals "with some lines" "${lines[1]}"
+  assertEquals "used to test" "${lines[2]}"
+}
+
+test_split_by_line_when_starting_with_space() {
+  TEXT_IN_VARIABLE=$(echo " Test file
+  starting with space")
+  
+  IFS='\n'
+  local index=0; while read -r line; do lines[$index]="$line";index=$(($index+1)); done <<< "$TEXT_IN_VARIABLE"
+  unset IFS
+
+  assertEquals " Test file" "${lines[0]}"
+  assertEquals "  starting with space" "${lines[1]}"
 }
 
 setUp() {
