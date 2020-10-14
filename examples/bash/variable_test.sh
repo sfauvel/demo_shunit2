@@ -3,10 +3,22 @@
 
 test_set_default_value_when_variable_not_set() {
   unset VAR
-  assertContains "DEFAULT" "${VAR:-"DEFAULT"}"
+  assertEquals "DEFAULT" "${VAR:-"DEFAULT"}"
 
   local VAR="VALUE" 
-  assertContains "VALUE" "${VAR:-"DEFAULT"}"
+  assertEquals "VALUE" "${VAR:-"DEFAULT"}"
+}
+
+my_method() {
+  local VAR=${1:-"DEFAULT"}
+  echo $VAR
+}
+
+test_set_default_value_when_parameter_not_set() {
+  
+  assertEquals "VALUE" "$(my_method "VALUE")"
+
+  assertEquals "DEFAULT" "$(my_method)"
 }
 
 test_global_variable_is_modified_from_function() {
