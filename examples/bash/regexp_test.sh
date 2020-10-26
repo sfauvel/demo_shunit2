@@ -23,6 +23,20 @@ test_regexp_with_space() {
   fi
 }
 
+test_regexp_number() {
+  REGEXP="^[0-9]+$"
+  assertTrue "[[ "1234" =~ $REGEXP ]]"
+  assertFalse "[[ "xyz" =~ $REGEXP ]]"
+  assertFalse "[[ "12xy" =~ $REGEXP ]]"
+}
+
+test_regexp_contains_digit() {
+  REGEXP="[0-9]+"
+  assertTrue "[[ "1234" =~ $REGEXP ]]"
+  assertFalse "[[ "xyz" =~ $REGEXP ]]"
+  assertTrue "[[ "12xy" =~ $REGEXP ]]"
+}
+
 # Load and run shUnit2.
 SHUNIT2_PATH=../../shunit2
 . ${SHUNIT2_PATH}/shunit2
