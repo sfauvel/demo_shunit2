@@ -83,6 +83,25 @@ test_loop_over_files_using_for_with_space_in_name() {
 
 }
 
+test_find_all_files_recursively() {
+  unset FILES
+
+  mkdir "${testDir}/subdirA"
+  mkdir "${testDir}/subdirA/subdirB"
+  touch "${testDir}/a.txt"
+  touch "${testDir}/subdirA/b.txt"
+  touch "${testDir}/subdirA/subdirB/c.txt"
+  
+  for file in $(find ${testDir} -name *.txt | sort)
+  do
+    FILES="$FILES${file##*/};"
+  done
+  
+  assertEquals "a.txt;b.txt;c.txt;" "${FILES}"
+
+}
+
+
 # Display files in folder
 files_list() {
   local FILES=""

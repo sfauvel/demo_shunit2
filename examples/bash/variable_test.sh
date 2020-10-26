@@ -39,6 +39,11 @@ test_global_variable_is_not_modified_when_it_local_in_function() {
 
 }
 
+test_replace_string_in_variable() {
+  local VAR="Hello world!"
+  assertEquals "Hello everybody!" "${VAR/world/everybody}"
+}
+
 set_global_variable() {
   VAR="$1"
 }
