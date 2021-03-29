@@ -1,6 +1,6 @@
 #! /bin/bash
 
-
+# http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion
 test_set_default_value_when_variable_not_set() {
   unset VAR
   assertEquals "DEFAULT" "${VAR:-"DEFAULT"}"
@@ -8,6 +8,26 @@ test_set_default_value_when_variable_not_set() {
   local VAR="VALUE" 
   assertEquals "VALUE" "${VAR:-"DEFAULT"}"
 }
+
+
+test_suppress_end_of_string() {
+  TEXT="abc.def.ghi"
+  assertEquals "abc" "${TEXT%%.*}"
+  assertEquals "abc.def" "${TEXT%.*}"
+}
+
+test_suppress_begin_of_string() {
+  TEXT="abc.def.ghi"
+  assertEquals "ghi" "${TEXT##*.}"
+  assertEquals "def.ghi" "${TEXT#*.}"
+}
+
+test_subsitute_substring() {
+  TEXT="abc.def.ghi"
+  assertEquals "abc_def.ghi" "${TEXT/./_}"
+  assertEquals "abc_def_ghi" "${TEXT//./_}"
+}
+
 
 my_method() {
   local VAR=${1:-"DEFAULT"}
