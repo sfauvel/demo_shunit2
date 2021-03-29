@@ -81,6 +81,12 @@ test_split_by_line_when_starting_with_space() {
   assertEquals "  starting with space" "${lines[1]}"
 }
 
+test_remove_multi_space_in_string() {
+  TEXT_IN_VARIABLE="line    with  words    separated  by  several    spaces"
+  assertEquals "line with words separated by several spaces" "$(echo $TEXT_IN_VARIABLE | tr -s ' ')"
+  
+}
+
 setUp() {
   TEXT_IN_VARIABLE=$(echo "Test file
 with some lines
