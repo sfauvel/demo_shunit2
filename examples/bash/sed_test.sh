@@ -41,6 +41,14 @@ test_replace_all_in_file() {
   assertContains "$(cat $TEXT_IN_FILE)" "Txst filx" 
 }
 
+test_multiple_replacement() {
+
+  # Add option `g` to replace all occurences
+  sed -i "s/e/x/g ; s/i/y/g" ${TEXT_IN_FILE}
+
+  assertContains "$(cat $TEXT_IN_FILE)" "Txst fylx" 
+}
+
 setUp() {
   testDir="${SHUNIT_TMPDIR}/sed"
   mkdir "${testDir}"
