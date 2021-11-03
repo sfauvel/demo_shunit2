@@ -21,6 +21,23 @@ test_search_text_not_present_in_string() {
   fi
 }
 
+test_string_ends_with() {
+  if [[ "my text with some words.end" == *with\ some ]]
+  then
+    fail "Substring should not be the end of string"
+  fi
+
+  if [[ "my text with some wordsXend" == *with\ some\ words.end ]]
+  then
+    fail "Substring should not be the end of string"
+  fi
+ 
+  if [[ ! "my text with some words.end" == *with\ some\ words.end ]]
+  then
+    fail "Substring should be the end of string"
+  fi
+}
+
 test_replace_text_in_string() {
   TEXT_IN_VARIABLE=${TEXT_IN_VARIABLE/some lines/one line}
   assertContains "$TEXT_IN_VARIABLE" "one line" 
