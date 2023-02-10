@@ -33,6 +33,12 @@ test_replace_text_with_group_word() {
   assertContains "$(cat $TEXT_IN_FILE)" "test sed xcommandx" 
 }
 
+test_replace_text_in_a_variable() {
+  # Use double quote to extend variable content
+  replace_text=xyz
+  sed -i "s/test sed command/test sed ${replace_text}command/" ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "test sed xyzcommand" 
+}
 test_replace_all_in_file() {
 
   # Add option `g` to replace all occurences

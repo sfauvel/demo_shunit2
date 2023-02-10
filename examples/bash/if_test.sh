@@ -29,7 +29,14 @@ test_if_with_or() {
 test_if_with_or_and_double_bracket() {
   if [[ 2 -eq 1 || 4 -eq 5 ]]; then fail "None are equals"; fi
   if [[ 1 -eq 1 || 4 -eq 5 ]]; then pass; else fail "1 equals 1"; fi
-  }
+ }
+
+
+test_equalls_with_string() {
+  TOTO="toto"
+  if [[ "$TOTO" == "toto" ]]; then pass; else fail "$TOTO not equals to toto"; fi
+  if [[ "$TOTO" == "titi"  ]]; then fail "$TOTO equals to titi"; fi
+ }
 
 # With simple bracket use -o and -a
 test_if_on_variable_with_or() {
