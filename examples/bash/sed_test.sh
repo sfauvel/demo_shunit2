@@ -39,20 +39,30 @@ test_replace_text_in_a_variable() {
   sed -i "s/test sed command/test sed ${replace_text}command/" ${TEXT_IN_FILE}
   assertContains "$(cat $TEXT_IN_FILE)" "test sed xyzcommand" 
 }
+
+test_replace_text_wwith_spaces() {
+  sed -i 's/e/\ /' ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "T st file" 
+}
+
 test_replace_all_in_file() {
 
   # Add option `g` to replace all occurences
   sed -i "s/e/x/g" ${TEXT_IN_FILE}
-
   assertContains "$(cat $TEXT_IN_FILE)" "Txst filx" 
 }
 
 test_multiple_replacement() {
-
-  # Add option `g` to replace all occurences
   sed -i "s/e/x/g ; s/i/y/g" ${TEXT_IN_FILE}
-
   assertContains "$(cat $TEXT_IN_FILE)" "Txst fylx" 
+}
+
+test_replace_with_multiline() {
+  MULTILINE=$(echo "toto\ntata\ntiti")
+  sed -i "s/Test/${MULTILINE}/g" ${TEXT_IN_FILE}
+  assertContains "$(cat $TEXT_IN_FILE)" "toto
+tata
+titi file" 
 }
 
 setUp() {
